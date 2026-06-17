@@ -600,7 +600,7 @@ def bubble_sort(arr):
 
 data = [64, 34, 25, 12, 22, 11, 90]
 print("Before:", data)
-sorted_data = bubble_sort(data[:])   # data[:] makes a copy
+sorted_data = bubble_sort(data[:])
 print("After: ", sorted_data)
 print("\n")
 
@@ -608,4 +608,208 @@ print("----------Part 6----------")
 print("Challenge 1")
 print("How many steps does binary search need to find a number in a list of 1,000,000 items? Calculate math.ceil(math.log2(1000000))")
 print("................\n" * 20)
-print("")
+print("log2(1000000) = ", math.log2(1000000))
+
+print("\n\n\n")
+print("==========9.Calculus I==========")
+
+print("----------Slope - How Steep Is a Line?----------")
+
+def slope(x1, y1, x2, y2):
+    """Slope of the line through 2 points."""
+    return (y2 - y1)/ (x2 - x1)
+
+print("Slope from (0,0) to (3,6):", slope(0, 0, 3, 6))    # 2.0  (goes up 2 for every 1 across)
+print("Slope from (1,1) to (4,2):", slope(1, 1, 4, 2))    # 0.333...
+print("Slope from (2,5) to (6,5):", slope(2, 5, 6, 5))    # 0.0  (flat line!)
+
+
+def f(x):
+    return x ** 2
+
+# Average rate of change of x² between x=1 and x=3
+x1, x2 = 1, 3
+y1, y2 = f(x1), f(x2)
+average_slope = (y2 - y1) / (x2 - x1)
+print(f"Between x={x1} and x={x2}, the curve rises at an average rate of {average_slope}")
+# (1, 1) and (3, 9)  →  (9 - 1) / (3 - 1) = 4
+
+def derivative(f, x, h=0.000001):
+    """Estimate the slope of f at the point x (the derivative)."""
+    return (f(x+h) - f(x)) / h
+
+print("Slope of x² at x=3:", round(derivative(f, 3), 4))    # very close to 6
+print("Slope of x² at x=5:", round(derivative(f, 5), 4))    # very close to 10
+print("Slope of x² at x=0:", round(derivative(f, 0), 4))    # very close to 0 (the bottom is flat!)
+
+def derivative(f, x, h=0.000001):
+    return (f(x + h) - f(x)) / h
+
+print(f"{'x':>4} | {'our estimate':>14} | {'rule (2x)':>10}")
+print("-" * 36)
+for x in range(1, 6):
+    estimate = round(derivative(f, x), 3)
+    rule = 2 * x
+    print(f"{x:>4} | {estimate:>14} | {rule:>10}")
+
+print("==========10.Calculus II: Integrals & Area Under a Curve==========")
+
+def integrate(f, a, b, n):
+    """Estimate the area under f from a to b using n rectangles."""
+    width = (b - a) / n        # how wide each rectangle is
+    total_area = 0
+
+    for i in range(n):
+        x = a + i * width      # left edge of this rectangle
+        height = f(x)          # the curve's value there
+        total_area += height * width
+
+    return total_area
+
+print("With 10 rectangles:", round(integrate(f, 0, 1, 10), 5))
+
+def integrate(f, a, b, n):
+    width = (b - a) / n
+    total_area = 0
+    for i in range(n):
+        x = a + i * width
+        total_area += f(x) * width
+    return total_area
+
+print(f"{'rectangles':>12} | {'area estimate':>14}")
+print("-" * 30)
+for n in [1, 10, 100, 1000, 100000]:
+    estimate = integrate(f, 0, 1, n)
+    print(f"{n:>12} | {round(estimate, 6):>14}")
+
+print("\nThe exact answer is 1/3 =", round(1/3, 15))
+
+def integrate(f, a, b, n=100000):
+    width = (b - a) / n
+    total = 0
+    for i in range(n):
+        x = a + i * width
+        total += f(x) * width
+    return total
+
+# A car's speed (in meters per second) at time t seconds: speed(t) = 3*t
+def speed(t):
+    return 3 * t
+
+
+# How far does the car travel between t=0 and t=4 seconds?
+distance = integrate(speed, 0, 4)
+print(f"Distance traveled from 0 to 4 seconds: {round(distance, 2)} meters")
+
+import random
+
+print(random.randint(1, 6))        # a whole number from 1 to 6 (like a dice roll)
+print(random.randint(0, 1))             # a decimal between 0.0 and 1.0
+print(random.choice(["heads", "tails"]))   # picks one item at random
+print(random.choice(["🍎", "🍌", "🍇"]))     # works on any list!
+
+flips = 1000
+heads = 0
+
+for i in range(flips):
+    if random.choice(["H", "T"]) == "H":
+        heads += 1
+
+print(f"Out of {flips} flips, {heads} were heads.")
+print(f"That's a probability of {heads / flips}")   # should be close to 0.5
+
+print(f"{'rolls':>10} | {'fraction that were 6':>22}")
+print("-" * 38)
+for rolls in [10, 100, 1000, 100000]:
+    sixes = 0
+    for i in range(rolls):
+        if random.randint(1, 6) == 6:
+            sixes += 1
+    print(f"{rolls:>10} | {round(sixes / rolls, 4):>22}")
+
+print("\nThe true probability is 1/6 =", round(1/6, 15))
+
+darts = 100000
+inside = 0
+
+for i in range(darts):
+    x = random.random()      # 0 to 1
+    y = random.random()      # 0 to 1
+    if x**2 + y**2 <= 1:     # is the dart inside the quarter-circle?
+        inside += 1
+
+# fraction inside ≈ π/4, so multiply by 4 to estimate π
+pi_estimate = 4 * inside / darts
+print(f"Threw {darts} darts, {inside} landed inside the circle.")
+print(f"Estimated π ≈ {pi_estimate}")
+print(f"Real π ≈ {3.14159}")
+
+a = np.array([3, 4])
+b = np.array([1, 2])
+
+print("Add:        ", a + b)        # [4 6]  — adds matching parts
+print("Scale by 2: ", 2 * a)        # [6 8]  — multiplies every part
+print("Subtract:   ", a - b)        # [2 2]
+
+a = np.array([3, 4])
+length = np.sqrt(a[0]**2 + a[1]**2)     # √(3² + 4²) = √25 = 5
+print("Length of vector [3, 4]:", length)
+
+# NumPy has a shortcut for this:
+print("Length (the easy way):", np.linalg.norm(a))
+
+a = np.array([3, 4])
+b = np.array([1, 2])
+
+dot = a[0]*b[0] + a[1]*b[1]      # 3*1 + 4*2 = 11
+print("Dot product (by hand):", dot)
+
+print("Dot product (NumPy):  ", np.dot(a, b))    # 11 — same answer
+
+a = np.array([1, 0])
+b = np.array([1, 1])
+
+cos_angle = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+angle_degrees = np.degrees(np.arccos(cos_angle))
+print(f"Angle between the vectors: {round(angle_degrees, 1)}°")    # 45.0°
+
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+print(matrix)
+print("Shape (rows, columns):", matrix.shape)    # (2, 3) — 2 rows, 3 columns
+print("Top-left number:", matrix[0, 0])          # 1   (row 0, column 0)
+print("Bottom-right number:", matrix[1, 2])      # 6   (row 1, column 2)
+
+A = np.array([[1, 2],
+              [3, 4]])
+B = np.array([[5, 6],
+              [7, 8]])
+
+print("A @ B =")
+print(A @ B)        # combines rows of A with columns of B
+
+# coefficients (the numbers in front of x and y)
+A = np.array([[2, 1],
+              [1, 3]])
+
+# the answers on the right side
+b = np.array([8, 9])
+
+solution = np.linalg.solve(A, b)
+print(f"x = {solution[0]}")     # 3.0
+print(f"y = {solution[1]}")     # 2.0
+
+A = np.array([[2, 1], [1, 3]])
+b = np.array([8, 9])
+solution = np.linalg.solve(A, b)
+x, y = solution
+
+print("Check equation 1:", 2*x + 1*y, "should be 8")
+print("Check equation 2:", 1*x + 3*y, "should be 9")
+
+print("THE END")
+print("Done on Tuesday June 16, 2026")
+print("Goodbye!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")

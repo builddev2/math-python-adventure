@@ -1048,6 +1048,520 @@ For n items, bubble sort takes about n² comparisons. Binary search is much smar
 
 ---
 
+# Stage 9 — Calculus I: Derivatives & Rates of Change
+## Python: Helper Functions, Numerical Methods
+## Math: Slope, Average vs. Instantaneous Rate of Change, Derivatives
+
+> ⚡ **Difficulty is going up!** In Stage 8 you watched a function *approach* a value (a limit). Now you'll use that exact idea to measure how fast things change. This is the first big idea of **calculus** — the math that powers physics, engineering, and even video game animation.
+
+---
+
+### 9.1 Slope — How Steep Is a Line?
+
+You already know **slope** from algebra. It measures how steep a line is:
+
+```
+slope = rise / run = (change in y) / (change in x)
+```
+
+If you have two points, the slope between them is `(y2 - y1) / (x2 - x1)`.
+
+```python
+def slope(x1, y1, x2, y2):
+    """Slope of the line through two points."""
+    return (y2 - y1) / (x2 - x1)
+
+print("Slope from (0,0) to (3,6):", slope(0, 0, 3, 6))    # 2.0  (goes up 2 for every 1 across)
+print("Slope from (1,1) to (4,2):", slope(1, 1, 4, 2))    # 0.333...
+print("Slope from (2,5) to (6,5):", slope(2, 5, 6, 5))    # 0.0  (flat line!)
+```
+
+A big slope means steep. A slope of 0 means flat. A negative slope means going downhill.
+
+---
+
+### 9.2 Average Rate of Change on a Curve
+
+A straight line has the **same** slope everywhere. But a curve like `f(x) = x²` is steeper in some places than others! 
+
+The slope between two points *on a curve* is called the **average rate of change**. We pick two x-values, find their y-values with the function, and take the slope:
+
+```python
+def f(x):
+    return x ** 2
+
+# Average rate of change of x² between x=1 and x=3
+x1, x2 = 1, 3
+y1, y2 = f(x1), f(x2)
+average_slope = (y2 - y1) / (x2 - x1)
+print(f"Between x={x1} and x={x2}, the curve rises at an average rate of {average_slope}")
+# (1, 1) and (3, 9)  →  (9 - 1) / (3 - 1) = 4
+```
+
+But what if we want the steepness at *one exact point*, not the average over a gap? That's where the magic happens. 👇
+
+---
+
+### 9.3 The Derivative — Instantaneous Rate of Change
+
+Here's the trick: make the two points **closer and closer together** until the gap is almost zero. Remember limits from Stage 8? We shrink the run (`h`) toward 0:
+
+```
+slope at x ≈ (f(x + h) - f(x)) / h        ... where h is a tiny number
+```
+
+This "slope at a single point" is called the **derivative**. Let's write a function that estimates it:
+
+```python
+def derivative(f, x, h=0.000001):
+    """Estimate the slope of f at the point x (the derivative)."""
+    return (f(x + h) - f(x)) / h
+
+def f(x):
+    return x ** 2
+
+print("Slope of x² at x=3:", round(derivative(f, 3), 4))    # very close to 6
+print("Slope of x² at x=5:", round(derivative(f, 5), 4))    # very close to 10
+print("Slope of x² at x=0:", round(derivative(f, 0), 4))    # very close to 0 (the bottom is flat!)
+```
+
+Notice the slope changes depending on *where* you are on the curve. That's what makes a curve curvy!
+
+---
+
+### 9.4 Checking the Famous Power Rule
+
+Mathematicians discovered a shortcut: the derivative of `x²` is exactly `2x`, and the derivative of `x³` is exactly `3x²`. This is called the **power rule**. Let's check our numerical derivative against the rule with a table:
+
+```python
+def derivative(f, x, h=0.000001):
+    return (f(x + h) - f(x)) / h
+
+def f(x):
+    return x ** 2          # the rule says its derivative should be 2*x
+
+print(f"{'x':>4} | {'our estimate':>14} | {'rule (2x)':>10}")
+print("-" * 36)
+for x in range(1, 6):
+    estimate = round(derivative(f, x), 3)
+    rule = 2 * x
+    print(f"{x:>4} | {estimate:>14} | {rule:>10}")
+```
+
+When your estimate matches the rule, you've just *experimentally proven* a calculus law with Python! 🎉
+
+**The math connection:** A derivative tells you the slope at every point. Where the derivative is 0, the curve is momentarily flat — that's a **peak** or a **valley** (super useful for finding the highest or lowest point of something).
+
+---
+
+### Stage 9 Challenges
+
+1. Use your `derivative` function on `f(x) = x ** 3` at `x = 2`. The power rule says the answer should be `3 * x²`. Does your estimate match? Try a couple of other x-values too.
+2. The derivative of `sin(x)` is famously `cos(x)`. Use your `derivative` function (with `math.sin`) to estimate the slope of `sin(x)` at `x = 0`. Then compare it to `math.cos(0)`. Are they close?
+3. A ball's height is `h(t) = -5*t**2 + 20*t`. The ball is at its highest point when its rate of change (slope) is 0. Estimate the derivative at `t = 1`, `t = 2`, and `t = 3`. Between which times does the slope cross zero?
+
+---
+
+---
+
+# Stage 10 — Calculus II: Integrals & Area Under a Curve
+## Python: Accumulation Loops (Riemann Sums)
+## Math: Area Under a Curve, Integration, Convergence
+
+> ⚡ **Even harder now!** Stage 9 measured how things *change*. Stage 10 does the opposite — it *adds up* tiny pieces to measure a whole. This is the second great idea of calculus: the **integral**.
+
+---
+
+### 10.1 The Big Idea — Slicing Area Into Rectangles
+
+How do you find the area under a curvy line? You can't use a simple rectangle formula because the top is curved. The clever trick: **chop the area into many thin rectangles**, find each rectangle's area, and add them all up.
+
+The more (and thinner) the rectangles, the better the estimate. This is called a **Riemann sum**.
+
+```
+area ≈ rectangle1 + rectangle2 + rectangle3 + ...
+each rectangle area = height × width
+```
+
+The height of each rectangle comes from the function; the width is the same small number for all of them.
+
+---
+
+### 10.2 Building a Riemann Sum with a Loop
+
+Let's write a function that estimates the area under any curve `f` between `a` and `b`, using `n` rectangles:
+
+```python
+def integrate(f, a, b, n):
+    """Estimate the area under f from a to b using n rectangles."""
+    width = (b - a) / n        # how wide each rectangle is
+    total_area = 0
+
+    for i in range(n):
+        x = a + i * width      # left edge of this rectangle
+        height = f(x)          # the curve's value there
+        total_area += height * width
+
+    return total_area
+
+def f(x):
+    return x ** 2
+
+# Area under x² from 0 to 1, using 10 rectangles
+print("With 10 rectangles:", round(integrate(f, 0, 1, 10), 5))
+```
+
+Each loop adds one skinny rectangle's area to the running total. That `total_area += ...` is an **accumulation** pattern — building up an answer piece by piece.
+
+---
+
+### 10.3 More Rectangles = Better Accuracy (Convergence!)
+
+Watch what happens as we use more and more rectangles. The exact area under `x²` from 0 to 1 is exactly **1/3 ≈ 0.33333**. Our estimate should sneak up on it — just like a limit from Stage 8!
+
+```python
+def integrate(f, a, b, n):
+    width = (b - a) / n
+    total_area = 0
+    for i in range(n):
+        x = a + i * width
+        total_area += f(x) * width
+    return total_area
+
+def f(x):
+    return x ** 2
+
+print(f"{'rectangles':>12} | {'area estimate':>14}")
+print("-" * 30)
+for n in [1, 10, 100, 1000, 100000]:
+    estimate = integrate(f, 0, 1, n)
+    print(f"{n:>12} | {round(estimate, 6):>14}")
+
+print("\nThe exact answer is 1/3 =", round(1/3, 6))
+```
+
+See the estimates converge toward 0.3333? That's the integral revealing itself. The same "approach a value" idea from limits is doing the work again.
+
+---
+
+### 10.4 A Real-World Use — Distance From Speed
+
+Integrals aren't just about abstract curves. If you know how fast something is moving at every moment, the **area under the speed graph is the total distance traveled**.
+
+```python
+def integrate(f, a, b, n=100000):
+    width = (b - a) / n
+    total = 0
+    for i in range(n):
+        x = a + i * width
+        total += f(x) * width
+    return total
+
+# A car's speed (in meters per second) at time t seconds: speed(t) = 3*t
+def speed(t):
+    return 3 * t
+
+# How far does the car travel between t=0 and t=4 seconds?
+distance = integrate(speed, 0, 4)
+print(f"Distance traveled from 0 to 4 seconds: {round(distance, 2)} meters")
+```
+
+You just used calculus to turn a *speed* into a *distance* — exactly what a car's odometer does!
+
+**The math connection:** Derivatives (Stage 9) and integrals (Stage 10) are **opposites**. A derivative breaks a quantity down into its rate of change; an integral builds a quantity up from its pieces. Together they are the heart of calculus.
+
+---
+
+### Stage 10 Challenges
+
+1. Use `integrate` to estimate the area under `f(x) = x ** 3` from 0 to 2. Try `n = 10`, `n = 1000`, and `n = 100000`. The exact answer is 4 — how close do you get?
+2. The area under a flat line `f(x) = 5` from 0 to 3 should be a simple rectangle (width 3, height 5 = area 15). Confirm your `integrate` function agrees. Why doesn't the number of rectangles matter here?
+3. A runner's speed is `speed(t) = 2*t + 1` meters per second. Estimate how far they run between `t = 0` and `t = 5` seconds. (Hint: it's the area under the speed curve.)
+
+---
+
+---
+
+# Stage 11 — Probability & Random Simulations  ✨ *New Concept!*
+## Python: The `random` Module, Monte Carlo Simulation
+## Math: Probability, Expected Value, the Law of Large Numbers
+
+> ✨ **A brand-new concept!** Until now your programs always gave the *same* answer every time. Now you'll teach the computer to roll dice, flip coins, and throw darts — and use that randomness to *discover* math. This is how scientists model weather, how games stay fun, and how banks measure risk.
+
+---
+
+### 11.1 Teaching Python to Be Random
+
+Python has a built-in toolbox called `random`. Here are its most useful tools:
+
+```python
+import random
+
+print(random.randint(1, 6))        # a whole number from 1 to 6 (like a dice roll)
+print(random.randint(0, 1))             # a decimal between 0.0 and 1.0
+print(random.choice(["heads", "tails"]))   # picks one item at random
+print(random.choice(["🍎", "🍌", "🍇"]))     # works on any list!
+```
+
+Run it a few times — you'll get different answers each time. That's the point! Each run is like a fresh roll of the dice.
+
+---
+
+### 11.2 Simulating Many Coin Flips
+
+**Probability** measures how likely something is, from 0 (never) to 1 (always). A fair coin has a 0.5 (50%) chance of heads. Let's test that by flipping a *simulated* coin thousands of times and counting:
+
+```python
+import random
+
+flips = 1000
+heads = 0
+
+for i in range(flips):
+    if random.choice(["H", "T"]) == "H":
+        heads += 1
+
+print(f"Out of {flips} flips, {heads} were heads.")
+print(f"That's a probability of {heads / flips}")   # should be close to 0.5
+```
+
+The `heads / flips` is the **experimental probability** — what actually happened. It won't be exactly 0.5, but it should be close.
+
+---
+
+### 11.3 The Law of Large Numbers
+
+Here's something beautiful: **the more times you try, the closer your experiment gets to the true probability.** This is called the **Law of Large Numbers**. Let's watch it happen by rolling a die and counting how often we get a 6 (the true probability is 1/6 ≈ 0.1667):
+
+```python
+import random
+
+print(f"{'rolls':>10} | {'fraction that were 6':>22}")
+print("-" * 38)
+for rolls in [10, 100, 1000, 100000]:
+    sixes = 0
+    for i in range(rolls):
+        if random.randint(1, 6) == 6:
+            sixes += 1
+    print(f"{rolls:>10} | {round(sixes / rolls, 4):>22}")
+
+print("\nThe true probability is 1/6 =", round(1/6, 4))
+```
+
+With few rolls the fraction jumps around. With many rolls it settles right near 0.1667. The randomness "averages out."
+
+---
+
+### 11.4 Monte Carlo — Estimating π With Darts! 🎯
+
+Now the showstopper. We can estimate **π** (pi!) using nothing but random darts. Here's the idea:
+
+- Imagine a square that is 2 units wide, with a circle of radius 1 inside it.
+- Throw random darts at the square.
+- The fraction of darts that land *inside the circle* relates to π by: `area of circle / area of square = π / 4`.
+
+A point `(x, y)` is inside the circle if `x² + y² ≤ 1` (that's the Pythagorean theorem from Stage 5!).
+
+```python
+import random
+
+darts = 100000
+inside = 0
+
+for i in range(darts):
+    x = random.random()      # 0 to 1
+    y = random.random()      # 0 to 1
+    if x**2 + y**2 <= 1:     # is the dart inside the quarter-circle?
+        inside += 1
+
+# fraction inside ≈ π/4, so multiply by 4 to estimate π
+pi_estimate = 4 * inside / darts
+print(f"Threw {darts} darts, {inside} landed inside the circle.")
+print(f"Estimated π ≈ {pi_estimate}")
+print(f"Real π     ≈ {3.14159}")
+```
+
+This trick — using random chance to compute a real answer — is called a **Monte Carlo simulation**, named after a famous casino. Real scientists use it to solve problems too hard for a formula!
+
+**The math connection:** Geometry (the circle), the Pythagorean theorem (`x² + y² ≤ 1`), and probability all team up to reveal π. Math is connected. 🌐
+
+---
+
+### Stage 11 Challenges
+
+1. Roll **two** dice (each `random.randint(1, 6)`) thousands of times and add them. Estimate the probability that the sum is exactly 7. Is 7 more or less likely than 2? (Try counting a few sums to see.)
+2. Run the π-estimating program with `darts = 100`, then `10000`, then `1000000`. Does the estimate get closer to 3.14159 as you throw more darts? Connect this to the Law of Large Numbers.
+3. Simulate a "lucky spinner" with `random.choice(["win", "lose", "lose", "lose"])`. After many spins, what fraction are wins? Does it match what you'd expect from the list?
+
+---
+
+---
+
+# Stage 12 — Matrices & Vectors  ✨ *New Concept!*
+## Python: NumPy Arrays as Vectors and Matrices
+## Math: Linear Algebra — Vectors, Matrices, Solving Systems of Equations
+
+> ✨ **The final boss — a brand-new concept!** Back in Stage 4 you solved *one* equation for *one* unknown. Now you'll solve *many* equations with *many* unknowns at once, using grids of numbers called **matrices**. This is **linear algebra**, the math behind 3D graphics, machine learning, and Google's search engine.
+
+*(This stage uses NumPy. If you skipped Stage 7, run `pip install numpy` first.)*
+
+---
+
+### 12.1 Vectors — Arrows With Math
+
+A **vector** is just a list of numbers that we treat as a single object — like an arrow pointing in space. We store one in a NumPy array. Vectors can be added, scaled, and more — all at once:
+
+```python
+import numpy as np
+
+a = np.array([3, 4])
+b = np.array([1, 2])
+
+print("Add:        ", a + b)        # [4 6]  — adds matching parts
+print("Scale by 2: ", 2 * a)        # [6 8]  — multiplies every part
+print("Subtract:   ", a - b)        # [2 2]
+```
+
+The **magnitude** (length) of a vector uses — surprise! — the Pythagorean theorem from Stage 5:
+
+```python
+import numpy as np
+
+a = np.array([3, 4])
+length = np.sqrt(a[0]**2 + a[1]**2)     # √(3² + 4²) = √25 = 5
+print("Length of vector [3, 4]:", length)
+
+# NumPy has a shortcut for this:
+print("Length (the easy way):", np.linalg.norm(a))
+```
+
+---
+
+### 12.2 The Dot Product — Multiplying Vectors
+
+The **dot product** multiplies matching parts of two vectors and adds the results. It tells you how much two vectors point in the same direction:
+
+```python
+import numpy as np
+
+a = np.array([3, 4])
+b = np.array([1, 2])
+
+dot = a[0]*b[0] + a[1]*b[1]      # 3*1 + 4*2 = 11
+print("Dot product (by hand):", dot)
+
+print("Dot product (NumPy):  ", np.dot(a, b))    # 11 — same answer
+```
+
+The dot product even lets you find the **angle** between two vectors (used constantly in video game physics!):
+
+```python
+import numpy as np
+
+a = np.array([1, 0])
+b = np.array([1, 1])
+
+cos_angle = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+angle_degrees = np.degrees(np.arccos(cos_angle))
+print(f"Angle between the vectors: {round(angle_degrees, 1)}°")    # 45.0°
+```
+
+---
+
+### 12.3 Matrices — Grids of Numbers
+
+A **matrix** is a 2D grid of numbers (rows and columns). In NumPy it's an array of arrays:
+
+```python
+import numpy as np
+
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+print(matrix)
+print("Shape (rows, columns):", matrix.shape)    # (2, 3) — 2 rows, 3 columns
+print("Top-left number:", matrix[0, 0])          # 1   (row 0, column 0)
+print("Bottom-right number:", matrix[1, 2])      # 6   (row 1, column 2)
+```
+
+You can multiply two matrices together using the `@` symbol. Matrix multiplication combines information in a special way — it's how a computer rotates a 3D model or runs a layer of a neural network:
+
+```python
+import numpy as np
+
+A = np.array([[1, 2],
+              [3, 4]])
+B = np.array([[5, 6],
+              [7, 8]])
+
+print("A @ B =")
+print(A @ B)        # combines rows of A with columns of B
+```
+
+---
+
+### 12.4 Solving Systems of Equations — The Grand Finale
+
+Here's the real power. Suppose you have **two equations with two unknowns**:
+
+```
+2x + 1y = 8
+1x + 3y = 9
+```
+
+Solving this by hand takes work. NumPy solves it in one line! We put the left-side numbers in a matrix and the right-side numbers in a vector:
+
+```python
+import numpy as np
+
+# coefficients (the numbers in front of x and y)
+A = np.array([[2, 1],
+              [1, 3]])
+
+# the answers on the right side
+b = np.array([8, 9])
+
+solution = np.linalg.solve(A, b)
+print(f"x = {solution[0]}")     # 3.0
+print(f"y = {solution[1]}")     # 2.0
+```
+
+Let's **check** it — plug the answers back in:
+
+```python
+import numpy as np
+
+A = np.array([[2, 1], [1, 3]])
+b = np.array([8, 9])
+solution = np.linalg.solve(A, b)
+x, y = solution
+
+print("Check equation 1:", 2*x + 1*y, "should be 8")
+print("Check equation 2:", 1*x + 3*y, "should be 9")
+```
+
+Back in Stage 4 you solved one equation. Now you can solve a whole *system* of them at once — even with 10, 100, or 1000 unknowns. That's the power of linear algebra. 🚀
+
+**The math connection:** Vectors, the Pythagorean theorem, dot products, and equation-solving all live together in linear algebra. It's the language computers use to handle data, graphics, and AI.
+
+---
+
+### Stage 12 Challenges
+
+1. Create two vectors `np.array([2, 5])` and `np.array([4, 1])`. Compute their dot product two ways (by hand and with `np.dot`) and confirm they match. Then find the angle between them.
+2. Solve this system of equations with `np.linalg.solve`, then verify your answer by plugging it back in:
+   ```
+   3x + 2y = 16
+   1x - 1y = 2
+   ```
+3. Build two 2×2 matrices of your choice and multiply them with `@`. Then swap the order (`B @ A` instead of `A @ B`). Do you get the same answer? (Matrix multiplication has a surprise in store!)
+
+---
+
+---
+
 # You Did It! 🏆
 
 Congratulations! You have learned:
@@ -1062,9 +1576,13 @@ Congratulations! You have learned:
 | Recursion | Trigonometry: sin, cos, tan, unit circle |
 | NumPy, Matplotlib | Linear regression, data visualization |
 | Sorting & searching algorithms | Logarithms, exponential growth, limits |
+| Helper functions, numerical methods | Calculus I: derivatives & rates of change |
+| Accumulation loops (Riemann sums) | Calculus II: integrals & area under a curve |
+| The `random` module, Monte Carlo simulation | Probability, expected value, law of large numbers |
+| NumPy arrays as matrices & vectors | Linear algebra: vectors, matrices, solving systems |
 
 ### What to Learn Next
 - **Python:** Try building a text adventure game, a website with Flask, or dive into machine learning with scikit-learn
-- **Math:** Calculus (derivatives and integrals), linear algebra, probability theory
+- **Math:** Multivariable calculus, statistics & data science, or the math behind 3D graphics and AI
 
 Keep going — you are already thinking like a real programmer and mathematician!
