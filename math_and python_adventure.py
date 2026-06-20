@@ -653,7 +653,7 @@ for x in range(1, 6):
     print(f"{x:>4} | {estimate:>14} | {rule:>10}")
 
 print("==========10.Calculus II: Integrals & Area Under a Curve==========")
-
+print("Toward 12")
 def integrate(f, a, b, n):
     """Estimate the area under f from a to b using n rectangles."""
     width = (b - a) / n        # how wide each rectangle is
@@ -807,9 +807,10 @@ b = np.array([8, 9])
 solution = np.linalg.solve(A, b)
 x, y = solution
 
-print("Check equation 1:", 2*x + 1*y, "should be 8")
-print("Check equation 2:", 1*x + 3*y, "should be 9")
+print("Check equation 1 2*x + 1*y:", 2*x + 1*y, "should be 8")
+print("Check equation 2 1*x + 3*y:", 1*x + 3*y, "should be 9")
 
+print("Go to guessing_the_square_root_of_2.py")
 print("THE END")
 print("Done on Tuesday June 16, 2026")
 print("Goodbye!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")

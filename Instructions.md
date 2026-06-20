@@ -1562,6 +1562,25 @@ Back in Stage 4 you solved one equation. Now you can solve a whole *system* of t
 
 ---
 
+---
+
+# 🔥 Grand Challenges — For True Math Wizards
+### These 5 puzzles combine many stages at once. No code is given — figure it out! Take your time, they are the hardest yet.
+
+1. **Hunt for a square root (Stages 9 + 4).** Without ever using `math.sqrt`, can you find the square root of 2 on your own? Start from a guess and repeatedly use your `derivative` tool from Stage 9 to nudge the guess closer to where `f(x) = x**2 - 2` hits zero. How many nudges until your guess stops changing? (This famous trick has a name — look up "Newton's method" once you've tried it.)
+
+2. **Measure a circle by adding up slices (Stages 10 + 5).** The top edge of a circle of radius 1 follows a curve you can write with the Pythagorean theorem. Use your `integrate` tool from Stage 10 to find the area trapped under that curve. Can you predict the answer from the area of a full circle *before* you run it? How close does your estimate come?
+
+3. **A surprising party (Stage 11).** In a room of just 23 people, how likely is it that two of them share a birthday? Most people guess "very unlikely." Simulate many random rooms and count for yourself. Were you surprised?
+
+4. **A ratio hidden in the rabbits (Stages 6 + 3).** Take your Fibonacci numbers and divide each one by the number just before it. Keep going for bigger and bigger Fibonacci numbers. Do the answers settle toward a single value? Research what that number is called — it shows up in art and nature everywhere.
+
+5. **Distance in 3D (Stages 12 + 5).** Stage 5's Pythagorean theorem worked for flat triangles. Invent your own version that finds the straight-line distance between two points floating in 3D space, then check your hand-built formula against what NumPy's vector tools give you. Do they agree?
+
+---
+
+---
+
 # You Did It! 🏆
 
 Congratulations! You have learned:
