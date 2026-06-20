@@ -26,7 +26,7 @@ if reveal == "Yes"or "yes":
         print("................................" * 30)
         print("...")
         print("................................" * 10)
-        print("It is...   ", math.sqrt(2), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("It is...   ", round(math.sqrt(2), 15), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     else:
         print("Wrong passcode. Wrong passcode. Stopping.")
         Breakpoint
@@ -51,4 +51,3 @@ elif reveal is not "yes" or "Yes" or "no" or "No":
 else:
     print("Looks like a no.")
     Breakpoint
-
