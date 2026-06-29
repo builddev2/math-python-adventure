@@ -1,17 +1,19 @@
-from bdb import Breakpoint
 import math
+import random
 from passcode_for_guessing_the_square_root_of_2 import passcode2026618, name20260625, watchinfo
 nametest = input("What is your name? ")
 if nametest == name20260625:
     expectancy = f"Watch name: {watchinfo[0]}. Model: {watchinfo[1]}. MAC address: {watchinfo[2]}. SN: {watchinfo[3]}"
     expectancytest = all(input("What is your watch info? "))
     if expectancytest == expectancy:
-        print("Passcode:", passcode2026618)
+        print("Passcode:", passcode2026618())
     else:
         print("Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.(1000 behind)Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wrong.Wron(2000 behind)")
 else: 
     print("Wrong name. Exiting.")
-print(passcode2026618())
+numbers = [5187, 3471, 4723, passcode2026618(), 5149, 4099, 1036, 7931, 3405]
+shuffled_numbers = random.shuffle(numbers)
+print(shuffled_numbers)
 print("\n")
 print("Time to guess.")
 firstabby = float(input("Give an estimate for x. It is around 1.4. You have 5 guesses. x**2(x to the power of 2) - 2 = 0(return goal). 1st guess: "))
@@ -30,7 +32,7 @@ fifthabby = float(input("Guess 5: "))
 xguess5 = fifthabby**2 - 2
 print("Return5:", xguess5)
 reveal = input("Do you want to reveal the real answer(15 digits!)? ")
-if reveal == "Yes" or "yes":
+if reveal == "Yes" or reveal == "yes":
     passcodetest = int(input("What is the passcode(1 try)? "))
     if passcodetest == passcode2026618():
         print("................................" * 50)
@@ -40,9 +42,9 @@ if reveal == "Yes" or "yes":
         print("................................" * 10)
         print("It is...   ", round(math.sqrt(2), 15), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     else:
-        print("Wrong passcode. Wrong passcode. Stopping.")
-        Breakpoint
-elif reveal != "yes" or "Yes" or "no" or "No":
+        print("Wrong." * 100, "Stopping.")
+        quit()
+elif reveal != "yes" or reveal != "Yes" or reveal != "no" or reveal != "No":
     print("Looks like a maybe.")
     passcodetest2 = int(input("What is the passcode(1 try)? "))
     if passcodetest2 == passcode2026618():
@@ -56,10 +58,10 @@ elif reveal != "yes" or "Yes" or "no" or "No":
             print("It is...   ", math.sqrt(2), "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         else:
             print("Ok.")
-            Breakpoint
+            quit()
     else:
         print("Wrong passcode. Wrong passcode. Stopping.")
-        Breakpoint
+        quit()
 else:
     print("Looks like a no.")
-    Breakpoint
+    quit()
